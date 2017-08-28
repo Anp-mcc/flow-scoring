@@ -1,0 +1,9 @@
+signalModel:
+    frequency: 5
+    windowSize: 10
+
+mathModel:
+    featureTypes:
+        - max
+        - min
+

@@ -1,0 +1,5 @@
+MATH_MODEL_SECTION = "mathModel"
+SIGNAL_MODEL_SECTION = "signalModel"
+FEATURE_TYPES_SECTION = "featureTypes"
+WINDOW_SIZE = "windowSize"
+FREQUENCY = "frequency"
