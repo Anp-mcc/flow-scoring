@@ -1,4 +1,4 @@
-class Feature:
+class FeatureStrategy:
 
     def __init__(self, func):
         self.func = func

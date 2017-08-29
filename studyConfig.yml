@@ -2,6 +2,9 @@ signalModel:
     frequency: 5
     windowSize: 10
 
+scoringModel:
+    frequency: 2
+
 mathModel:
     featureTypes:
         - max

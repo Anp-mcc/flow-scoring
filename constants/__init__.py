@@ -1,5 +1,6 @@
 MATH_MODEL_SECTION = "mathModel"
 SIGNAL_MODEL_SECTION = "signalModel"
+SCORING_MODEL_SECTION = "scoringModel"
 FEATURE_TYPES_SECTION = "featureTypes"
 WINDOW_SIZE = "windowSize"
 FREQUENCY = "frequency"
