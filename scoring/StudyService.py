@@ -1,8 +1,9 @@
-from scoring.Study import Study
-from scoring.Study import StudyConfig
+from scoring.StudyConfig import StudyConfig
 from scoring.FrameProvider import FrameProvider
 from scoring.features.FeatureSet import FeatureSet
 from scoring.factories import create_scoring_provider
+from scoring.models import StudyModel
+from mongoengine import connect
 
 
 def fluent(fn):
@@ -44,13 +45,26 @@ class StudyBuilder:
         frame_provider = FrameProvider(self.signal_samples, frequency, frame_size)
         scoring_provider = create_scoring_provider(scoring_frame_size, scoring_frequency, self.scoring_samples)
         feature_set = FeatureSet(frame_provider, scoring_provider, feature_types)
-        return Study(feature_set)
+        return StudyService(self.config.study_name, feature_set)
 
 
 class StudyService:
 
+    def __init__(self, name, feature_set):
+        self.name = name
+        self.feature_set = feature_set
+
+    def create_study(self):
+        feature_set = []
+        for feature in self.feature_set:
+            feature_set.append(feature)
+
+        return StudyModel(name=self.name, features=feature_set)
+
     @classmethod
     def run_study(cls, signal_path, scoring_path, config_path):
-        study = StudyBuilder.create_study().with_signal(signal_path).with_config(config_path).with_scoring(scoring_path).build()
-        study.run()
+        study_service = StudyBuilder.create_study().with_signal(signal_path).with_config(config_path).with_scoring(scoring_path).build()
+        study = study_service.create_study()
+        connect(db="default", host='mongodb://localhost')
+        study.save()
 

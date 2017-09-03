@@ -1,11 +1,12 @@
 from scoring.features.FeatureStrategy import FeatureStrategy
+from scoring.factories import create_feature
 
 
-def get_feature(feature_type):
+def get_feature_strategy(feature_type):
     if feature_type == "min":
-        return FeatureStrategy(func=min)
+        return FeatureStrategy(func=min, type=feature_type)
     if feature_type == "max":
-        return FeatureStrategy(func=max)
+        return FeatureStrategy(func=max, type=feature_type)
 
 
 class FeatureSet:
@@ -19,7 +20,8 @@ class FeatureSet:
         for index, frame in self.frame_provider:
             scoring_type = self.scoring_provider.get_by_position(index)
             for feature_type in self.features:
-                feature = get_feature(feature_type)
-                yield scoring_type, index, feature.calculate(frame)
+                feature_strategy = get_feature_strategy(feature_type)
+                feature_value = feature_strategy.calculate(frame)
+                yield create_feature(scoring_type, feature_value, feature_strategy.type)
 
 

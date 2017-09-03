@@ -1,3 +1,5 @@
+studyName: "Default study"
+
 signalModel:
     frequency: 5
     windowSize: 10

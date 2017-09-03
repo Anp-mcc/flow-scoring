@@ -4,23 +4,15 @@ from constants import SIGNAL_MODEL_SECTION
 from constants import MATH_MODEL_SECTION
 from constants import WINDOW_SIZE
 from constants import FREQUENCY
+from constants import STUDY_NAME
 import yaml
-
-
-class Study:
-
-    def __init__(self, feature_set):
-        self.feature_set = feature_set
-
-    def run(self):
-        for feature in self.feature_set:
-            print(feature)
 
 
 class StudyConfig:
 
     @classmethod
     def load_config(cls, config_path):
+        study_name = ""
         feature_types = []
         frequency = 0
         window_size = 0
@@ -30,6 +22,7 @@ class StudyConfig:
             math_model = raw_cfg[MATH_MODEL_SECTION]
             signal_model = raw_cfg[SIGNAL_MODEL_SECTION]
             scoring_model = raw_cfg[SCORING_MODEL_SECTION]
+            study_name = raw_cfg[STUDY_NAME]
             for key in math_model:
                 if key == FEATURE_TYPES_SECTION:
                     feature_types = math_model[key]
@@ -42,13 +35,15 @@ class StudyConfig:
                 if key == FREQUENCY:
                     scoring_frequency = scoring_model[key]
 
-            return StudyConfig(feature_types, scoring_frequency, frequency, window_size)
+
+            return StudyConfig(study_name, feature_types, scoring_frequency, frequency, window_size)
 
     @property
     def signal_config(self):
         return self.frequency, self.window_size
 
-    def __init__(self, feature_types, scoring_frequency, frequency, window_size):
+    def __init__(self, study_name, feature_types, scoring_frequency, frequency, window_size):
+        self.study_name = study_name
         self.scoring_frequency = scoring_frequency
         self.feature_types = feature_types
         self.window_size = window_size
