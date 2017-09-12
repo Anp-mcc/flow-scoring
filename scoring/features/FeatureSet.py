@@ -1,5 +1,11 @@
 from scoring.features.FeatureStrategy import FeatureStrategy
+from scoring.features.FreqDomainFeature import FrequencyFeature
+from scoring.features.TimeDomainFeature import HjorthActivityFeature
+from scoring.features.TimeDomainFeature import HjorthMobilityFeature
+from scoring.features.TimeDomainFeature import HjorthComplexityFeature
+from scoring.features.TimeDomainFeature import ZeroCrossingFeature
 from scoring.factories import create_feature
+import numpy as np
 
 
 def get_feature_strategy(feature_type):
@@ -7,6 +13,16 @@ def get_feature_strategy(feature_type):
         return FeatureStrategy(func=min, type=feature_type)
     if feature_type == "max":
         return FeatureStrategy(func=max, type=feature_type)
+    if feature_type == "freq":
+        return FrequencyFeature(type=feature_type)
+    if feature_type == "zero_c":
+        return ZeroCrossingFeature(type=feature_type)
+    if feature_type == "hj_activity":
+        return HjorthActivityFeature(type=feature_type)
+    if feature_type == "hj_mobility":
+        return HjorthMobilityFeature(type=feature_type)
+    if feature_type == "hj_complexity":
+        return HjorthComplexityFeature(type=feature_type)
 
 
 class FeatureSet:
