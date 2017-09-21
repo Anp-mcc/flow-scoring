@@ -2,6 +2,7 @@ from scoring.helpers import load_samples
 from scoring.helpers import fast_fourier_transform
 from scoring.features.FeatureSet import get_feature_strategy
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class SignalReport:
@@ -13,6 +14,9 @@ class SignalReport:
         pass
 
     def percentile(self):
+        petros = self.feature_dict["petros"]
+        plt.plot(petros)
+        plt.show()
         for key, values in self.feature_dict.items():
 
             p50 = np.percentile(values, 50)
@@ -36,7 +40,8 @@ class SignalAnalysis:
         self.sampling_rate = sampling_rate
         self.epoch_len = epoch_len
         self.feature_dict = {}
-        self.feature_list = ["freq", "zero_c", "hj_activity", "hj_mobility", "hj_complexity"]
+        self.feature_list = ["petros", "hj_fractal", "katz_fractal", "hurts_fractal"]
+
 
     def execute(self, samples):
         epoch_size = self.sampling_rate * self.epoch_len
@@ -54,7 +59,7 @@ class SignalAnalysis:
             if not epoch.size:
                 break
 
-            fourier_transform = fast_fourier_transform(epoch)
+            fourier_transform = fast_fourier_transform(epoch, normalized=True)
             fourier_abs = np.abs(fourier_transform)
             freq_domain = fourier_abs[:len(fourier_transform)//2]
 
@@ -70,7 +75,6 @@ class SignalAnalysis:
                     add_to_features(feature_type, feature_strategy.feature_value)
                 else:
                     continue
-
 
             start += epoch_size
             offset += epoch_size

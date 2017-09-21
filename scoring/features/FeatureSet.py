@@ -4,8 +4,12 @@ from scoring.features.TimeDomainFeature import HjorthActivityFeature
 from scoring.features.TimeDomainFeature import HjorthMobilityFeature
 from scoring.features.TimeDomainFeature import HjorthComplexityFeature
 from scoring.features.TimeDomainFeature import ZeroCrossingFeature
+from scoring.features.TimeDomainFeature import PetrosianFDFeature
+from scoring.features.TimeDomainFeature import HjorthFdFeature
+from scoring.features.TimeDomainFeature import EnergyFeature
+from scoring.features.TimeDomainFeature import KatzFdFeature
+from scoring.features.TimeDomainFeature import HurtsFdFeature
 from scoring.factories import create_feature
-import numpy as np
 
 
 def get_feature_strategy(feature_type):
@@ -23,6 +27,16 @@ def get_feature_strategy(feature_type):
         return HjorthMobilityFeature(type=feature_type)
     if feature_type == "hj_complexity":
         return HjorthComplexityFeature(type=feature_type)
+    if feature_type == "petros":
+        return PetrosianFDFeature(type=feature_type)
+    if feature_type == "hj_fractal":
+        return HjorthFdFeature(type=feature_type)
+    if feature_type == "katz_fractal":
+        return KatzFdFeature(type=feature_type)
+    if feature_type == "hurts_fractal":
+        return HurtsFdFeature(type=feature_type)
+    if feature_type == "energy":
+        return EnergyFeature(type=feature_type)
 
 
 class FeatureSet:

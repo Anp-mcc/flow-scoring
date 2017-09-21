@@ -25,7 +25,7 @@ class FrequencyFeature:
         max_component = np.max(freq_domain)
         index_of_max = np.argwhere(freq_domain == max_component)
 
-        if len(index_of_max) > 1:
+        if len(index_of_max) != 1:
             self.error = True
         else:
             [[max_freq]] = freq_level[index_of_max]
