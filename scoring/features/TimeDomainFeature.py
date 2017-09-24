@@ -12,13 +12,14 @@ class TimeDomainFeature:
     def __init__(self, type):
         self.type = type
         self.value = np.nan
+        self.error = False
 
     def domain(self):
         return "time"
 
     @property
     def is_error(self):
-        return False
+        return self.error
 
     @property
     def feature_value(self):
@@ -57,7 +58,10 @@ class HurtsFdFeature(TimeDomainFeature):
         tau = [np.sqrt(np.nanstd(np.subtract(epoch[lag:], epoch[:-lag]))) for lag in lags]
         poly = np.polyfit(np.log(lags), np.log(tau), 1)
 
-        self.value = poly[0]*2.0
+        if np.isnan(poly[0]):
+            self.error = True
+        else:
+            self.value = poly[0]*2.0
 
 
 class EnergyFeature(TimeDomainFeature):
@@ -88,7 +92,7 @@ class HjorthFdFeature(TimeDomainFeature):
         L = []
         x = []
         N = len(epoch)
-        for k in range(1,k_max):
+        for k in range(1, k_max):
             Lk = []
 
             for m in range(k):
@@ -104,7 +108,10 @@ class HjorthFdFeature(TimeDomainFeature):
 
         (p, r1, r2, s)= np.linalg.lstsq(x, L)  # Numpy least squares solution
 
-        self.value = p[0]
+        if np.isnan(p[0]):
+            self.error = True
+        else:
+            self.value = p[0]
 
 
 class HjorthActivityFeature(TimeDomainFeature):
